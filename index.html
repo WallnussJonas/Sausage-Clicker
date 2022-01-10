@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wurst Clicker</title>
+
+    <style>
+        .html, body {
+            color: white;
+            background-color: #444;
+        }
+       .sectionLeft {
+           float: left;
+           width: 80%;
+           padding-top: 20%;
+       }
+       .sectionRight {
+           float: right;
+           width: 100%;
+           padding-left: 80px;
+       }
+       .scoreContainer {
+           background-color: #303030;
+           border-radius: 10px;
+           font-size: 25px;
+           font-weight: bold;
+        }
+        .clickerContainer img {
+            position: relative;
+            transition: all .2s ease-in-out;
+        }
+        .clickerContainer img:hover { transform: scale(1.10); }
+        .clickerContainer img:active {transform: scale(0.99); }
+
+        .shopButton {
+            background-color: #b5b5b5;
+            transition: all .2s ease-in-out;
+            border-radius: 10px;
+            width: 100%;
+            margin: 10px 0px 10px 0px;
+            user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+        }
+        
+        .shopButton:hover {
+            background-color: #c7c7c7;
+            transition: all .2s ease-in-out;
+        }
+
+        .shopButton #image {
+            width: 	25%;
+        }
+
+        .shopButton img {
+           height: 64px;
+            width: 64px;
+        }
+
+        .shopButton #nameAndCost p {
+            margin: 0px;
+            width: 60%;
+        }
+
+        .shopButton #nameAndCost p:first-of-type {
+            font-size: 24px;
+        }
+
+        .shopButton #amount {
+            font-size: 48px;
+            color: #595959;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            width: 15%;
+
+        }
+
+        @media only screen and (max-width: 600px){
+        }
+
+    </style>
+</head>
+<body>
+    <div style="text-align: center;">
+        <div class="center">
+            <div class="scoreContainer">
+                <span id="score">0</span> Würste<br>
+                <span id="scorepersecond">0</span> Würste pro Sekunde
+            </div>
+            <br>
+            <div class="clickerContainer">
+                <img src="assets/sausage.png" height="256px" onclick="addToScore(clickingPower)">
+            </div>
+        </div>
+    </div>
+
+    <div class="sectionRight">
+        <table class="shopButton" onclick="buyCursor()">
+            <tr>
+                <td class="image"><img src="./assets/Cursor.png"></td>
+                <td class="nameAndCost">
+                    <p>Cursor</p>
+                    <p><span id="cursorcost">15</span> Würste</p>
+                </td>
+                <td id="amount"><span id="cursors">0</span></td>
+            </tr>
+        </table>
+        <table class="shopButton" onclick="buygrill()">
+            <tr>
+                <td class="image"><img src="./assets/grill.png"></td>
+                <td class="nameAndCost">
+                    <p>Grill</p>
+                    <p><span id="grillcost">50</span> Würste</p>
+                </td>
+                <td id="amount"><span id="grills">0</span></td>
+            </tr>
+        </table>
+        <table class="shopButton" onclick="buyMetzgerei()">
+            <tr>
+                <td class="image"><img src="./assets/Metzgerei.png"></td>
+                <td class="nameAndCost">
+                    <p>Metzgerei</p>
+                    <p><span id="metzgereicost">125</span> Würste</p>
+                </td>
+                <td id="amount"><span id="metzgerein">0</span></td>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        var score = 100;
+        var clickingPower = 1;
+
+        var cursorcost = 15;
+        var cursors = 0;
+
+        var grillcost = 50;
+        var grills = 0;
+
+        var metzgereicost = 125;
+        var metzgerein = 0;
+
+        // Cursor
+        function buyCursor() {
+            if (score >= cursorcost) {
+            score = score - cursorcost;
+            cursors = cursors + 1;
+            cursorcost = Math.round(cursorcost * 1.15);  
+            
+            document.getElementById("score").innerHTML = score;
+            document.getElementById("cursorcost").innerHTML = cursorcost;
+            document.getElementById("cursors").innerHTML = cursors;
+            updateScorePerSecond();
+            }
+        }
+
+        // grill
+        function buygrill() {
+            if (score >= grillcost) {
+            score = score - grillcost;
+            grills = grills + 1;
+            grillcost = Math.round(grillcost * 1.5);  
+            
+            document.getElementById("score").innerHTML = score;
+            document.getElementById("grillcost").innerHTML = grillcost;
+            document.getElementById("grills").innerHTML = grills;
+            updateScorePerSecond();
+            }
+        }
+
+        // Metzgerei
+        function buyMetzgerei() {
+            if (score >= metzgereicost) {
+            score = score - metzgereicost;
+            metzgerein = metzgerein + 1;
+            metzgereicost = Math.round(metzgereicost * 2);  
+            
+            document.getElementById("score").innerHTML = score;
+            document.getElementById("metzgereicost").innerHTML = metzgereicost;
+            document.getElementById("metzgerein").innerHTML = metzgerein;
+            updateScorePerSecond();
+            }
+        }
+
+
+        function addToScore(amount) {
+            score = score + amount;
+            document.getElementById("score").innerHTML = score;
+        }
+
+        function loadGame() {
+            var savedGame = JSON.parse(localStorage.getItem("gameSave"));
+            if (typeof savedGame.score !== "undefined") score = savedGame.score;
+            if (typeof savedGame.clickingPower !== "undefined") clickingPower = savedGame.clickingPower;
+            if (typeof savedGame.cursorcost !== "undefined") cursorcost = savedGame.cursorcost;
+            if (typeof savedGame.cursors !== "undefined") cursors = savedGame.cursors;
+            if (typeof savedGame.grillcost !== "undefined") grillcost = savedGame.grillcost;
+            if (typeof savedGame.grills !== "undefined") grills = savedGame.grills;
+            if (typeof savedGame.metzgereicost !== "undefined") metzgereicost = savedGame.metzgereicost;
+            if (typeof savedGame.metzgerein !== "undefined") metzgerein = savedGame.metzgerein;
+
+        }
+
+        function saveGame() {
+            var gameSave = {
+                score: score,
+                clickingPower: clickingPower,
+                cursorcost: cursorcost,
+                cursors: cursors,
+                grillcost: grillcost,
+                grills: grills,
+                metzgereicost: metzgereicost,
+                metzgerein: metzgerein
+            };
+            localStorage.setItem("gameSave", JSON.stringify(gameSave));
+        }
+
+        function updateScorePerSecond() {
+            ScorePerSecond = cursors * 5 + grills * 10 + metzgerein * 25;
+            document.getElementById("scorepersecond").innerHTML = ScorePerSecond;
+        }
+
+        window.onload = function() {
+            loadGame();
+            updateScorePerSecond();
+            document.getElementById("score").innerHTML = score;
+            document.getElementById("cursorcost").innerHTML = cursorcost;
+            document.getElementById("cursors").innerHTML = cursors;
+            document.getElementById("score").innerHTML = score;
+            document.getElementById("grillcost").innerHTML = grillcost;
+            document.getElementById("grills").innerHTML = grills;
+            document.getElementById("score").innerHTML = score;
+            document.getElementById("metzgereicost").innerHTML = metzgereicost;
+            document.getElementById("metzgerein").innerHTML = metzgerein;
+        };
+
+        // Total Score
+        setInterval(function() {
+            score = score + cursors * 5;
+            score = score + grills * 10 
+            score = score + metzgerein * 25;
+            document.getElementById("score").innerHTML = score;
+
+            document.title = score + " Würste - Wurst Clicker";
+        }, 1000); // 1000ms = 1 second
+
+        setInterval(function() {
+            saveGame();
+        }, 5000); // 30000ms = 30 seconds
+
+        document.addEventListener("keydown", function(event) {
+            if (event.ctrlKey && event.which == 83) { // ctrl + s
+                event.preventDefault();
+                saveGame();
+            }
+        }, false);
+    </script>
+</body>
+</html>
