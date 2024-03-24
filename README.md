@@ -1,2 +1,2 @@
 # Wurst Clicker
-![image](https://github.com/WallnussJonas/Sausage-Clicker/assets/65344424/02f2d172-c6b0-4693-b43c-6ffcfd5299d9)
+![chrome_RkSrktgebf](https://github.com/WallnussJonas/Sausage-Clicker/assets/65344424/235c09f5-e38d-4320-89bc-3c0b61fb8b20)
